@@ -5,7 +5,7 @@
 ## Project Overview
 
 
-For this project, I was interested to see if it is possible to predict if a restaurant would receive an A during their inspection. Based on research, the factors that would contribute to receiving a particular grade are the type of violations (ie. public hazard violation, critical violation, and general violation) and the points calculated from these violations leading to a score. I thought it would also be fascinating to analyze if there are relationships between: restaurant location vs. grade, cuisine vs. grade, restaurant size vs. grade, and when inspection is conducted vs. grade.
+For this project, I was interested in investigating the possibility of predicting if a restaurant would receive an A during their inspection. Based on research, the factors that would contribute to receiving a particular grade are the type of violations (ie. public hazard violation, critical violation, and general violation) and the points calculated from these violations leading to a score. I thought it would also be fascinating to analyze if there are relationships between: restaurant location vs. grade, cuisine vs. grade, restaurant size vs. grade, and when inspection is conducted vs. grade. As the project progressed, I added in other features such as restaurant size and duration since the restaurant has been open by merging in another dataset. 
 
 <b><u> Questions </u>:</b>
 * Do the following factors affect the restaurant inspection grade?
@@ -77,21 +77,23 @@ Null values in the Sidewalk Cafe Licenses and Applications dataset were as follo
    * Data points with no information on when their licenses were issued were also dropped, as most of them were indicated to have Applications Pending. 
    * In addition, because I was interested in cafe size as a parameter, I removed any data points which were missing this information. 
 
+
 ### Data Wrangling and Analysis
 
-The project was approached in ways. It was initially approached using only the NYC Restaurant Inspections dataset to see if:
+The project was initially approached using only the NYC Restaurant Inspections dataset to see if:
 
    * Specific violations (each violation indicated by its code) are important factors for predicting the grade.
    * Numbers of critical and non-critical violations (indicated by Critical Flags) are important factors for predicting the grade.
    * Type of cuisine is a predictor. I thought this would be a fun point to check if there is a relationship and if yes, why is this the case.
    * Restaurant location by borough and zip code has an affect on the grade it obtains. This would be interesting because some inspectors evaluate restaurants in the same area and seeing if there are usually a cluster of restaurants with As in an area may encourage potential owners to locate their restaurants there.
 
-Then I added the Sidewalk Cafe Licenses and Applications dataset and added the following features:
+Afterwards, I added the Sidewalk Cafe Licenses and Applications dataset and added the following features:
 
    * Duration the business has been open for (calculated by subtracting the license issuance date from 5/9/19)
    * Restaurant size (sq. ft)
 
 All specific violation dummy variables were removed instead as it would be difficult to interpret how each violation affects the grade since the number of points for each violation is unknown (I was unable to find the rubric).
+
 
 #### Outliers Handling
 
@@ -101,9 +103,23 @@ Further data cleaning was completed during this step during outlier evaluation.
 
 A boxplot of inspection scores showed positive skewness with outliers after 28 points. All data points with scores greater than 28 points were removed as any scores in that range are prone to shutdown. After removing these outliers, the distribution of the scores was more normal. A boxplot of inspection years showed outliers as any years below 2016. Since most recent years would be more relevant for prediction and the values are all 0s, data points from inspection years older than 2016 were also removed. 
 
+<p align='center'>
+    <img src='./images/boxplot_scores.png' title='Boxplot of Score Vales' width='425'/> <img height='350' hspace='20'/> <img src='./images/boxplot_inspection_yr.png' title='Boxplot of Inspection Year Values' width='425'/>
+</p>
+
+
 <u>Sidewalk Cafe Licenses and Applications Dataset Merged with NYC Restaurant Inspections Dataset</u>:
 
 A couple of outliers were also detected in scores, tables, chairs, and cafe size (sq ft) using boxplots. After reviewing the target value counts before/after the outliers were removed, some of these outliers were removed with the goal of also normalizing the class imbalance in the dataset. More caution was placed in handling these outliers as this subset of data was small - about 381 points. The tables and chairs columns were ultimately dropped as they were highly correlated with cafe size (sq ft) after reviewing the correlation matrix, discussed in next section.
+
+<p align='center'>
+    <img src='./images/boxplot_tables.png' title='Boxplot of Tables' width='425'/> <img height='350' hspace='20'/> <img src='./images/boxplot_chairs.png' title='Boxplot of Chairs' width='425'/>
+</p>
+
+<p align='center'>
+    <img src='./images/boxplot_scores2.png' title='Boxplot of Score Vales' width='425'/> <img height='350' hspace='20'/> <img src='./images/boxplot_rest_size.png' title='Boxplot of Restaurant Size (Sq Ft)' width='425'/>
+</p>
+
 
 #### Data Analysis
 
@@ -160,18 +176,81 @@ The following was noted:
        * Queens x Manhattan: -0.54
 
 
-
-
 ## Feature Engineering and Selection
 
+
 Dummy variables were created for all categorical variables.In the initial approach with only data from the NYC Restaurant Inspections dataset, feature selection was not done prior to running the machine learning models. However, in the next approach with merging the Sidewalk Cafes Licenses and Applications dataset, feature selection was done through feature importance with Decision Tree modelling. The top 200 most important features were selected for the model.
+
 
 ## Machine Learning Models
 
 
+In both the inital and subsequent approaches, the dataset was split 80/20 into training and testing sets. Class imbalance was evaluated and fixed in the training set. After which, the training data was also scaled before modelling.
+
+<b><u> Class Imbalance Evaluation for Initial Approach</u>:</b>
+
+<p align="center">
+    <img src='./images/inspections_class_imbalance.png' title="Initial Approach - Class Imbalance">
+</p>
+
+Class imbalance was fixed using undersampling. Samples were taken from the majority class (restaurants with A) without replacement to create a class with a size that matched the minority class.
+
+<b><u> Class Imbalance Evaluation for Subsequent Approach</u>:</b>
+
+<p align="center">
+    <img src='./images/cafe_inspections_class_imbalance.png' title="Subsequent Approach - Class Imbalance">
+</p>
+
+Class imbalance was fixed using SMOTE. New minority class points were synthesizes beside existing minority points. 
+
+Logistic regression, KNN, decision tree, and random forest models were run in both approaches. For the initial approach only, after baseline models were created, a randomized search was conducted to find the best parameters for each kind of model in the initial approach.
+
+<b><u>Results with NYC Restaurant Inspections Data Only</u>:</b>
+
+The best model was random forest with best parameters provided through randomized search. The best parameters were:
+
+   * 'n_estimators': 200
+   * 'min_samples_leaf': 0.05
+   * 'max_features': 0.35
+   * 'max_depth': 4
+
+The accuracy scores and F1 scores for training and testing were:
+
+   * <b>Train Accuracy score</b>:  0.859071138430569
+   * <b>Train F1 score</b>:  0.8732931499765687
+
+   * <b>Test Accuracy score</b>:  0.896551724137931
+   * <b>Test F1 score:  0.9255050505050505
+
+The confusion matrices for the training and testing were:
+
+<p align="center">
+    <img src='./images/rf_confus_matrix_train.png' title="Initial Approach - Confusion Matrix of Random Forest on Training Data" width="425"/> <img height="350" hspace="20"/> <img src='./images/rf_confus_matrix_test.png' title="Subsequent Approach - Confusion Matrix of Random Forest on Testing Data" width="425"/>
+</p>
+
+<b><u>Results with NYC Restaurant Inspections Data Merged with Sidewalk Cafe Licenses and Applications Data</u>:</b>
+
+Out of the three models run, the best one seems to be logistic regression. However, this is only because the confusion matrix yielded from using the model to predict from the training data was balanced compared to the results from the other two models. When the model was fit to the testing data, due to the large class imbalance in the actual/testing data, although it showed high accuracy and F1 scores, it was only predicting the true positives because the majority class were restaurants who received an A.
+
+The accuracy scores and F1 scores for training and testing were:
+
+   * <b><u>Training Accuracy Score</u>:</b> 0.9967105263157895
+   * <b><u>Training F1 Score</u>:</b> 0.9966996699669968
+   
+   * <b><u>Testing F1 Score</u>:</b> 0.9803921568627451
+   * <b><u>Testing Accuracy Score</u>:</b> 0.9967105263157895
+
+The confusion matrices for the training and testing were:
+
+<p align="center">
+    <img src='./images/cafe_log_confus_matrix_train.png' title="Initial Approach - Confusion Matrix of Logistic Regression on Training Data" width="425"/> <img height="350" hspace="20"/> <img src='./images/cafe_log_confus_matrix_test.png.png' title="Subsequent Approach - Confusion Matrix of Logistic Regression on Testing Data" width="425"/>
+</p>
+
 
 ## Conclusion & Next Steps
 
+
+Although the model from the initial approach look promising, the features used in the modelling are not actionable. Therefore this model cannot be used in practical use. On the other hand, there were more interesting features in the subsequent approach such as restaurant size (sq ft), which is highly correlated with number of tables and chairs, which can be acted upon depending on their weights on predicting the grade. However, the significant class imbalance present in the actual data 
 
 After a week working on this project, although I found some interesting insights, unfortunately, I was unable to finalize a model that could predict the inspection grade with actionable features. However, if I continue to work on this, the next steps would be:
 
