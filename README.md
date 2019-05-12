@@ -104,7 +104,7 @@ Further data cleaning was completed during this step during outlier evaluation.
 A boxplot of inspection scores showed positive skewness with outliers after 28 points. All data points with scores greater than 28 points were removed as any scores in that range are prone to shutdown. After removing these outliers, the distribution of the scores was more normal. A boxplot of inspection years showed outliers as any years below 2016. Since most recent years would be more relevant for prediction and the values are all 0s, data points from inspection years older than 2016 were also removed. 
 
 <p align='center'>
-    <img src='./images/boxplot_scores.png' title='Boxplot of Score Vales' width='425'/> <img height='350' hspace='20'/> <img src='./images/boxplot_inspection_yr.png' title='Boxplot of Inspection Year Values' width='425'/>
+    <img src='./images/boxplot_scores.png' title='Boxplot of Score Vales' width='425'/> <img hspace='10'/> <img src='./images/boxplot_inspection_yr.png' title='Boxplot of Inspection Year Values' width='425'/>
 </p>
 
 
@@ -113,11 +113,11 @@ A boxplot of inspection scores showed positive skewness with outliers after 28 p
 A couple of outliers were also detected in scores, tables, chairs, and cafe size (sq ft) using boxplots. After reviewing the target value counts before/after the outliers were removed, some of these outliers were removed with the goal of also normalizing the class imbalance in the dataset. More caution was placed in handling these outliers as this subset of data was small - about 381 points. The tables and chairs columns were ultimately dropped as they were highly correlated with cafe size (sq ft) after reviewing the correlation matrix, discussed in next section.
 
 <p align='center'>
-    <img src='./images/boxplot_tables.png' title='Boxplot of Tables' width='425'/> <img height='350' hspace='20'/> <img src='./images/boxplot_chairs.png' title='Boxplot of Chairs' width='425'/>
+    <img src='./images/boxplot_tables.png' title='Boxplot of Tables' width='425'/> <img hspace='10'/> <img src='./images/boxplot_chairs.png' title='Boxplot of Chairs' width='425'/>
 </p>
 
 <p align='center'>
-    <img src='./images/boxplot_scores2.png' title='Boxplot of Score Vales' width='425'/> <img height='350' hspace='20'/> <img src='./images/boxplot_rest_size.png' title='Boxplot of Restaurant Size (Sq Ft)' width='425'/>
+    <img src='./images/boxplot_scores2.png' title='Boxplot of Score Vales' width='425'/> <img hspace='10'/> <img src='./images/boxplot_rest_size.png' title='Boxplot of Restaurant Size (Sq Ft)' width='425'/>
 </p>
 
 
@@ -225,7 +225,7 @@ The accuracy scores and F1 scores for training and testing were:
 The confusion matrices for the training and testing were:
 
 <p align="center">
-    <img src='./images/rf_confus_matrix_train.png' title="Initial Approach - Confusion Matrix of Random Forest on Training Data" width="425"/> <img height="350" hspace="20"/> <img src='./images/rf_confus_matrix_test.png' title="Subsequent Approach - Confusion Matrix of Random Forest on Testing Data" width="425"/>
+    <img src='./images/rf_confus_matrix_train.png' title="Initial Approach - Confusion Matrix of Random Forest on Training Data" width="425"/> <img hspace="10"/> <img src='./images/rf_confus_matrix_test.png' title="Subsequent Approach - Confusion Matrix of Random Forest on Testing Data" width="425"/>
 </p>
 
 <b><u>Results with NYC Restaurant Inspections Data Merged with Sidewalk Cafe Licenses and Applications Data</u>:</b>
@@ -243,7 +243,7 @@ The accuracy scores and F1 scores for training and testing were:
 The confusion matrices for the training and testing were:
 
 <p align="center">
-    <img src='./images/cafe_log_confus_matrix_train.png' title="Initial Approach - Confusion Matrix of Logistic Regression on Training Data" width="425"/> <img height="350" hspace="20"/> <img src='./images/cafe_log_confus_matrix_test.png.png' title="Subsequent Approach - Confusion Matrix of Logistic Regression on Testing Data" width="425"/>
+    <img src='./images/cafe_log_confus_matrix_train.png' title="Initial Approach - Confusion Matrix of Logistic Regression on Training Data" width="425"/> <img hspace="10"/> <img src='./images/cafe_log_confus_matrix_test.png' title="Subsequent Approach - Confusion Matrix of Logistic Regression on Testing Data" width="425"/>
 </p>
 
 
