@@ -5,9 +5,7 @@
 ## Project Overview
 
 
-For food service establishment owners and staff, chances are, you are well acquainted with restaurant inspections especially since all restaurants in NYC are required to post their restaurant inspection grade for the public since 2010. Inspectors from the Department of Health and Mental Hygiene conduct surprise restaurant inspections throughout each year, which usually causes panic in owners and last minute scrambles to prepare for their arrival. All owners seek to receive a restaurant inspection grade of A, which is the best. Grades below an A (ie. B, C, and so on) can cause a decrease in the customer base.
-
-For this project, I was interested in finding the factors that can be used to determine if a restaurant would receive an A during their inspection. Based on research, the factors that would contribute to receiving a particular grade are the type of violations (ie. public hazard violation, critical violation, and general violation) and the points calculated from these violations leading to a score. I thought it would also be fascinating to analyze if there are relationships between: restaurant location vs. grade, cuisine vs. grade, restaurant size vs. grade, and when inspection is conducted vs. grade.
+For this project, I was interested to see if it is possible to predict if a restaurant would receive an A during their inspection. Based on research, the factors that would contribute to receiving a particular grade are the type of violations (ie. public hazard violation, critical violation, and general violation) and the points calculated from these violations leading to a score. I thought it would also be fascinating to analyze if there are relationships between: restaurant location vs. grade, cuisine vs. grade, restaurant size vs. grade, and when inspection is conducted vs. grade.
 
 <b><u> Questions </u>:</b>
 * Do the following factors affect the restaurant inspection grade?
@@ -22,8 +20,10 @@ For this project, I was interested in finding the factors that can be used to de
 The target variable for this project was restaurant inspection grade. A grade of A was expressed as a 1 and any grade other than A was expressed as a 0 in this project. Restaurant inspection score data was also available for this project and could be used as the target variable instead. However, in this case I decided to approach it as a binary classification problem instead of regression problem since the restaurant inspection grade information was available.
 
 
-## Restaurant Inspection Information
+## Background Information
 
+
+For food service establishment owners and staff, chances are, you are well acquainted with restaurant inspections especially since all restaurants in NYC are required to post their restaurant inspection grade for the public since 2010. Inspectors from the Department of Health and Mental Hygiene conduct surprise restaurant inspections throughout each year, which usually causes panic in owners and last minute scrambles to prepare for their arrival. All owners want a restaurant inspection grade of A. Grades below an A (ie. B, C, and so on) can cause a decrease in the customer base.
 
 Restaurants have two chances within an inspection cycle to receive an A. If a restaurant does not receive an A during the first inspection, it is revisited 1 month afterwards for a re-inspection. Restaurants are labeled as "Not Yet Graded" if a grade has not been provided yet.
 
@@ -35,7 +35,7 @@ In general, the following are the breakdown of grade and points:
    * B: 14-27 points
    * C: 28 or more points
 
-There are situations in which only a score is given without a grade. This is perhaps one of the reasons for the null values found in the dataset. More details on how these were handled in the next paragraph. More information on the NYC Department of Health and Mental Hygiene's process for evaluating restaurants can be found online at: <a href=https://www1.nyc.gov/assets/doh/downloads/pdf/rii/how-we-score-grade.pdf>here</a>. The link is also listed in the Data Sources section at the end of the page.
+There are situations in which only a score is given but not a grade. This is perhaps one of the reasons for the null values found in the dataset. More details on how these were handled in the next section. More information on the NYC Department of Health and Mental Hygiene's process for evaluating restaurants can be found online at: <a href=https://www1.nyc.gov/assets/doh/downloads/pdf/rii/how-we-score-grade.pdf>here</a>. The link is also listed in the Data Sources section at the end of the page.
 
 
 ## Data Collection and Analysis
@@ -46,7 +46,7 @@ The NYC Restaurant Inspections Dataset was the primary data source for this proj
 
 ### Null Value Handling
 
-One of the challenging items of this project was handling the null values in the datasets. 
+One of the challenging aspects of this project was handling the null values in the datasets. 
 
 Null values in the NYC Restaurant Inspections dataset were as follows:
 
@@ -99,11 +99,11 @@ Further data cleaning was completed during this step during outlier evaluation.
 
 <u>NYC Restaurant Inspections Dataset</u>:
 
-A boxplot of inspection scores showed positive skewness with outliers after 28 points. All data points with scores greater than 28 points were removed as any scores in that range are prone to shutdown. After removing these outliers, the distribution of the scores was more normal. A boxplot of inspection years showed outliers as any years below 2016. Since most recent years would be more relevant for prediction, data points from inspection years older than 2016 were also removed. 
+A boxplot of inspection scores showed positive skewness with outliers after 28 points. All data points with scores greater than 28 points were removed as any scores in that range are prone to shutdown. After removing these outliers, the distribution of the scores was more normal. A boxplot of inspection years showed outliers as any years below 2016. Since most recent years would be more relevant for prediction and the values are all 0s, data points from inspection years older than 2016 were also removed. 
 
 <u>Sidewalk Cafe Licenses and Applications Dataset Merged with NYC Restaurant Inspections Dataset</u>:
 
-A couple of outliers were also detected in scores, tables, chairs, and cafe size (sq ft) using boxplots. After reviewing the target value counts before/after the outliers were removed, some of these outliers were removed with the goal of also normalizing the class imbalance in the dataset. More caution was placed in handling these outliers as this subset of data was small - about 381 points. The tables and chairs columns were ultimately dropped as they were highly correlated with cafe size (sq ft) after reviewing the correlation matrix (0.797, 0.896 respectively).
+A couple of outliers were also detected in scores, tables, chairs, and cafe size (sq ft) using boxplots. After reviewing the target value counts before/after the outliers were removed, some of these outliers were removed with the goal of also normalizing the class imbalance in the dataset. More caution was placed in handling these outliers as this subset of data was small - about 381 points. The tables and chairs columns were ultimately dropped as they were highly correlated with cafe size (sq ft) after reviewing the correlation matrix, discussed in next section.
 
 #### Data Analysis
 
@@ -138,6 +138,9 @@ Here is a heatmap showing the correlation matrix for a subset of features:
 The following was noted:
 
    * Strongly correlated:
+       * Zip Code x Manhattan: -0.98
+       * Zip Code x Community District: 0.97
+       * Zip Code x City Council District: 0.96
        * Manhattan x Community District: -0.96
        * Tables x Chairs: 0.94
        * Manhattan x City Council District: -0.93
@@ -145,6 +148,7 @@ The following was noted:
        * Tables x Sq Ft: 0.88
        * Chairs x Sq Ft: 0.83
        * Brooklyn x City Council District: 0.85
+       * Zip Code x Brooklyn: 0.75
        * Critical Violations x Non Critical Violations: 0.74
        * Queens x Community District: 0.73
        * Brooklyn x Manhattan: -0.72
@@ -152,6 +156,7 @@ The following was noted:
    * Moderately correlated:
        * Score x Critical Violations: 0.59
        * Brooklyn x Community District: 0.58
+       * Zip Code x Queens: 0.55
        * Queens x Manhattan: -0.54
 
 
@@ -159,10 +164,21 @@ The following was noted:
 
 ## Feature Engineering and Selection
 
+Dummy variables were created for all categorical variables.In the initial approach with only data from the NYC Restaurant Inspections dataset, feature selection was not done prior to running the machine learning models. However, in the next approach with merging the Sidewalk Cafes Licenses and Applications dataset, feature selection was done through feature importance with Decision Tree modelling. The top 200 most important features were selected for the model.
 
 ## Machine Learning Models
 
+
+
 ## Conclusion & Next Steps
+
+
+After a week working on this project, although I found some interesting insights, unfortunately, I was unable to finalize a model that could predict the inspection grade with actionable features. However, if I continue to work on this, the next steps would be:
+
+   * More data (ie. Yelp API)
+   * Additional feature engineering (ie. interaction terms)
+   * Try removing the score as a feature
+
 
 ## Data Sources
 
