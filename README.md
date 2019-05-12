@@ -130,7 +130,7 @@ To begin, I took a look at the pairwise correlation matrix chart to see if there
 Here is a heatmap showing the correlation matrix for a subset of features:
 
 <p align="center">
-    <img src='./images/corr_heatmap.png' title="Correlation Heatmap of Key Features">
+    <img src='./images/corr_heatmap_subset_features1.png' title="Correlation Heatmap of Key Features">
 </p>
 
 The following was noted:
@@ -190,7 +190,7 @@ In both the inital and subsequent approaches, the dataset was split 80/20 into t
 <b><u> Class Imbalance Evaluation for Initial Approach</u>:</b>
 
 <p align="center">
-    <img src='./images/inspections_class_imbalance.png' title="Initial Approach - Class Imbalance">
+    <img src='./images/class_imb1.png' title="Initial Approach - Class Imbalance">
 </p>
 
 Class imbalance was fixed using undersampling. Samples were taken from the majority class (restaurants with A) without replacement to create a class with a size that matched the minority class.
