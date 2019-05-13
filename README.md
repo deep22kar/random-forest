@@ -219,8 +219,8 @@ The accuracy scores and F1 scores for training and testing were:
    * <b>Train Accuracy score</b>:  0.859071138430569
    * <b>Train F1 score</b>:  0.8732931499765687
 
-   * <b>Test Accuracy score</b>:  0.896551724137931
-   * <b>Test F1 score:  0.9255050505050505
+   * <b>Test Accuracy score:</b>  0.896551724137931
+   * <b>Test F1 score:</b>  0.9255050505050505
 
 The confusion matrices for the training and testing were:
 
