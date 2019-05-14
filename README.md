@@ -175,17 +175,59 @@ The following was noted:
        * Zip Code x Queens: 0.55
        * Queens x Manhattan: -0.54
 
+<b>Some insights from the data were:</b>
+
+There seems to be a negative linear trend between number of tables and chairs but the effect of both on scores seem to not have a specific pattern. Since there is a high correlation between tables and chairs with restaurant size, I ultimately dropped them from the features for the model.
+
+<p align="center">
+    <img src='./images/scores_tables_chairs_heatmap.png' title="Heatmap of Scores Based on # of Chairs and # of Tables">
+</p>
+
+When viewing the relationship Inspection Month and Inspection Year on Grade, there does not seem to be any variation depending on a particulary month or year, which seems to indicate there does not seem to be an interaction between year and month on grade. 
+
+<p align="center">
+    <img src='./images/heatmap_mo_yr.png' title="Heatmap Grade Based on Inspection Month and Year">
+</p>
+
+There seems to be some variation in grade based on the type of cuisine but it is unclear if this is due to the number of inspections completed within each cuisine group. There is a much larger number of inspections completed in American restaurants than in other cuisines.
+
+<p align="center">
+    <img src='./images/binned_cuisine_grade.png' title="Grade vs. Cuisines (Binned)">
+</p>
+
+<p align="center">
+    <img src='./images/binned_cuisines_inspections.png' title="Number of Inspections Per Cuisine">
+</p>
+
+Looking at the number of inspections, the number of inspections completed was much higher in Manhattan than in other boroughs as expected. It is anticipated that Manhattan may be a more important feature in the model in the other boroughs for this reason. Here is a graph showing this from just the NYC Restaurant Inspections dataset - the distribution is similar for when the second dataset was added:
+
+<p align="center">
+    <img src='./images/no_inspections_borough.png' title="Number of Inspections Per Borough">
+</p>
+
+In thinking about location, I also looked at # of critical violations and zip codes to the inspection grade. As expected, the zipcodes with less critical violations (0-1), have a greater chance for an A.
+
+<p align="center">
+    <img src='./images/zip_critical_grade_heatmap.png' title="Grade Based on Number of Critical Violations and Zip Code">
+</p>
+
+After adding the additoinal dataset, one of the interesting things to look at was ther relationship of restaurant size (sq ft) and location of inspections on scores. From the heatmap below, there does not seem to be any patterns but it can be noted that there is a much larger number of inspections completed in Manhattan > Brooklyn > Queens > Bronx. This is interesting to look at especially because when I looked at feature importance in the next step, larger size seems to be considered an important feature for the model.
+
+<p align="center">
+    <img src='./images/inspections_restsize_borough.png' title="Score Based on Borough and Restaurant Size (Sq. Ft)">
+</p>
+
 
 ## Feature Engineering and Selection
 
 
-Dummy variables were created for all categorical variables.In the initial approach with only data from the NYC Restaurant Inspections dataset, feature selection was not done prior to running the machine learning models. However, in the next approach with merging the Sidewalk Cafes Licenses and Applications dataset, feature selection was done through feature importance with Decision Tree modelling. The top 200 most important features were selected for the model.
+Dummy variables were created for all categorical variables. In the initial approach with only data from the NYC Restaurant Inspections dataset, feature selection was not done prior to running the machine learning models. However, in the next approach with merging the Sidewalk Cafes Licenses and Applications dataset, feature selection was done through feature importance with Decision Tree modelling. The top 200 most important features were selected for the model.
 
 
 ## Machine Learning Models
 
 
-In both the inital and subsequent approaches, the dataset was split 80/20 into training and testing sets. Class imbalance was evaluated and fixed in the training set. After which, the training data was also scaled before modelling.
+In both the inital and subsequent approaches, the dataset was split 80/20 into training and testing sets. Class imbalance was evaluated and fixed in the training set. After which, the training dataset was fit transformed using Standard Scaler while the testing dataset was transformed before modelling.
 
 <b><u> Class Imbalance Evaluation for Initial Approach</u>:</b>
 
@@ -209,18 +251,18 @@ Logistic regression, KNN, decision tree, and random forest models were run in bo
 
 The best model was random forest with best parameters provided through randomized search. The best parameters were:
 
-   * 'n_estimators': 200
-   * 'min_samples_leaf': 0.05
+   * 'n_estimators': 400
+   * 'min_samples_leaf': 0.04
    * 'max_features': 0.35
-   * 'max_depth': 4
+   * 'max_depth': 7
 
 The accuracy scores and F1 scores for training and testing were:
 
-   * <b>Train Accuracy score</b>:  0.859071138430569
-   * <b>Train F1 score</b>:  0.8732931499765687
+   * <b>Train Accuracy score</b>:  0.8596229266362033
+   * <b>Train F1 score</b>:  0.8737112984932106
 
-   * <b>Test Accuracy score:</b>  0.896551724137931
-   * <b>Test F1 score:</b>  0.9255050505050505
+   * <b>Test Accuracy score:</b>  0.8960159750633158
+   * <b>Test F1 score:</b>  0.9251691142967299
 
 The confusion matrices for the training and testing were:
 
@@ -252,7 +294,7 @@ The confusion matrices for the training and testing were:
 
 Although the model from the initial approach look promising, the features used in the modelling are not actionable. Therefore this model cannot be used in practical use. On the other hand, there were more interesting features in the subsequent approach such as restaurant size (sq ft), which is highly correlated with number of tables and chairs, which can be acted upon depending on their weights on predicting the grade. However, the significant class imbalance present in the actual data was a concern. Although the model seemed to work well when looking at the accuracy and f1 scores for the training data as well as the confusion matrix, which looks like it was accurately predicting the true positives and true negatives more so then false negatives and false positives, when the model was used on the testing data, the confusion matrix showed that it was only accurately predicting true positives (that a restaurant would get an A which is the fact). This is because as shown in the class imbalance graph above, there is a significantly larger number of restaurants that received an A in the dataset causing the model to only predict them.
 
-After a week working on this project, although I found some interesting insights, unfortunately, I was unable to finalize a model that could predict the inspection grade with actionable features. However, if I continue to work on this, the next steps would be:
+After less than a week working on this project, although I found some interesting insights, unfortunately, I was unable to finalize a model that could predict the inspection grade with actionable features. However, if I continue to work on this, the next steps would be:
 
    * More data (ie. Yelp API)
    * Additional feature engineering (ie. interaction terms)
