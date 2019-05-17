@@ -19,6 +19,8 @@ For this project, I was interested in investigating the possibility of predictin
 
 The target variable for this project was restaurant inspection grade. A grade of A was expressed as a 1 and any grade other than A was expressed as a 0 in this project. Restaurant inspection score data was also available for this project and could be used as the target variable instead. However, in this case I decided to approach it as a binary classification problem instead of regression problem since the restaurant inspection grade information was available.
 
+Unfortunately, in the end, there was no useable final model that would be able to predict if a resturant will receive an A or not. However, I enjoyed being able to go through the entire process and glean some interesting insights from data analysis. Before jumping into data analysis, one of the most challenging aspects about this dataset was that the majority of null values were in the target variable column. They were removed through a combination of domain knowledge from research on the restaurant inspections process, and grouping the citations (each row) with aggregation until each row represented results from a specific restaurant inspection date. One of interesting points results from this project was that during EDA, there does not seem to be a relationship between the restaurant size and inspection grade but during feature selection, restaurant size was noted to be an important feature for creating a model for predicting restaurant size. This may be the case because the majority of restaurant inspections were in Manhattan, which contain many of the larger sized restaurants. However, overall, the location was noted to be an important feature for predicting inspection grade. In addition, when the inspection was completed also does not have a relationship with inspection grade. Some expected results were that most resturant inspections were conducted in American restaurants followed by Asian restaurants, and that the more critical violations there are in an area, the greater the chance, the restaurant will get an A. 
+
 
 ## Background Information
 
@@ -45,8 +47,6 @@ The NYC Restaurant Inspections Dataset was the primary data source for this proj
 
 
 ### Null Value Handling
-
-One of the challenging aspects of this project was handling the null values in the datasets. 
 
 Null values in the NYC Restaurant Inspections dataset were as follows:
 
